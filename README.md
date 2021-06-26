@@ -2,6 +2,8 @@
 
 ### to-do
 
+0. plan out classes, functions
+
 1. database
    - create
    - delete

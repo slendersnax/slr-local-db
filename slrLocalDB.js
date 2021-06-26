@@ -1,1 +1,5 @@
-console.log("works");
+class SlrDB {
+    constructor() {
+
+    }
+}
