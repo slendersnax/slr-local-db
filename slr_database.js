@@ -1,17 +1,18 @@
-// text parser --------------------------------------------------------
-class SlrParser {
-    constructor() {
+/*
 
-    }
-}
+slr_database
+
+aka everything is a localStorage entry
+
+set-up:
+    - one entry contains the names of the tables
+    - each table is a different entry
+
+*/
 
 // database handling --------------------------------------------------
 class SlrDB {
     constructor() {
-        sCurDB = "";
-        rDbs = "";
-        rTables = "";
-
         if(window.localStorage.getItem("slr_database")) {
 
         }
@@ -34,7 +35,8 @@ class SlrDB {
     }
 
     // database functions -------------------------------------------------------------
-    // base functions
+    // the only one we really need is resetting the database, deleting everything
+    // 
     addDB = (name) => {
         set(name, "");
     }
