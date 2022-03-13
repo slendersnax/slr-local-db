@@ -12,11 +12,11 @@ class SlrDB {
         rDbs = "";
         rTables = "";
 
-        if(window.localStorage.getItem("slrDBs")) {
+        if(window.localStorage.getItem("slr_database")) {
 
         }
         else {
-            window.localStorage.setItem("slrDBs");
+            window.localStorage.setItem("slr_database");
         }
     }
 
