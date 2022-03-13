@@ -8,7 +8,7 @@
    - create
    - delete
 2. tables
-   - create inside x database
+   - create - there is only one database
    - delete
    - modify
       - create new columns
