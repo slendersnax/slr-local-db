@@ -11,6 +11,8 @@ set-up:
 
 ideas:
     - maybe make all the functions return something as a form of error signaling?
+
+    boop
 */
 
 // database handling --------------------------------------------------
