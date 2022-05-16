@@ -1,8 +1,14 @@
 # slr-local-db
 
-### to-do
+slr_database
 
-0. plan out classes, functions
+aka everything is a localStorage entry
+
+#### set-up:
+   - database entry contains the names and column numbers of the tables
+   - each table is a different localStorage entry
+
+### to-do
 
 1. database
    - create
@@ -18,3 +24,6 @@
    - add entry to table
    - delete entry
    - modify entry
+
+4. misc
+   - make columns have names - otherwise modifying tables is...weird
