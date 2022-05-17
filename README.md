@@ -1,6 +1,4 @@
-# slr-local-db
-
-slr_database
+# slr_database
 
 aka everything is a localStorage entry
 
