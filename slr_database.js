@@ -1,4 +1,3 @@
-// database handling --------------------------------------------------
 class SlrDB {
     constructor() {
         this.dbName = "slr_database";
@@ -11,7 +10,7 @@ class SlrDB {
         }
     }
 
-    // localStorage wrappers for ease of use
+    // localStorage wrappers for ease of use ------------------------------------------
     set = (key, value) => {
         window.localStorage.setItem(key, value);
     }
@@ -29,7 +28,9 @@ class SlrDB {
         window.localStorage.removeItem(key);
     }
 
-    // quality of life functions
+
+
+    // quality of life functions ------------------------------------------------------
 
     // adding one value to a generic field
     addToField = (name, value) => {
@@ -43,12 +44,13 @@ class SlrDB {
         }
     }
 
+    // deleting one value from a generic field
     deleteFromField = (name, index) => {
         let content = this.get(name).split(this.separator);
         content.splice(index, 1);
 
         if(content.length > 0) { // if we had more than one entry
-            this.set(name, content.join(this.separator) + this.separator);
+            this.set(name, content.join(this.separator));
         }
     }
 
@@ -61,11 +63,11 @@ class SlrDB {
             let values = tables[i].split(this.innerSeparator);
 
             if(values[0] == name) {
-                return i + 1; // so that if i == 0 we still know the table exists
+                return i; // so that if i == 0 we still know the table exists
             }
         }
 
-        return 0;
+        return -1;
     }
 
     // getting the number of a table's columns
@@ -81,6 +83,8 @@ class SlrDB {
         }
     }
 
+
+
     // database functions -------------------------------------------------------------
     
     delDB = () => {
@@ -95,6 +99,8 @@ class SlrDB {
         this.setEmpty(this.dbName);
     }
 
+
+
     // table functions -----------------------------------------------------------------
     addTable = (name, nOfColumns) => {
         this.set(name, "");
@@ -102,13 +108,11 @@ class SlrDB {
     }
 
     deleteTable = (name) => {
-        let exists = this.isTable(name);
-        if(exists > 0) {
-            let tables = this.get(this.dbName).split(this.separator);
-            exists --;
+        let index = this.isTable(name);
+
+        if(index > -1) {
             this.remove(name);           // removing the localStorage entry of the table
-            tables.splice(exists, 1);    // removing the name of the table from the list of tables
-            this.set(this.dbName, tables.join(this.separator));    // updating the list of tables with the new value
+            this.deleteFromField(this.dbName, index);
             console.log("MSG - table deleted successfully");
         }
         else {
@@ -116,10 +120,12 @@ class SlrDB {
         }
     }
 
+
+
     // value functions -----------------------------------------------------------------
 
     addEntry = (name, ...values) => {
-        if(this.isTable(name)) {
+        if(this.isTable(name) > -1) {
             let nTableColumns = this.getColumnNumber(name);
             
             if(values.length == nTableColumns) {
@@ -136,12 +142,16 @@ class SlrDB {
     }
 
     deleteEntry = (name, index) => {
-        if(this.isTable(name)) {
+        index --; // because humans start counting from 1, but arrays start from 0
+        if(this.isTable(name) > -1) {
             let tableContent = this.get(name).split(this.separator);
 
             if(index < tableContent.length) {
-                tableContent.splice(index, 1);
+                this.deleteFromField(name, index);
             }
+        }
+        else {
+            console.log("MSG - ERR - no table with this name");
         }
     }
 
@@ -157,8 +167,10 @@ class SlrDB {
     printTables = () => {
         let tables = this.get(this.dbName).split(this.separator);
 
-        for(let i = 0; i < tables.length; i ++) {
-            console.log(tables[i].split(this.innerSeparator)[0] + " - " + tables[i].split(this.innerSeparator)[1]);
+        if(tables != "") {
+            for(let i = 0; i < tables.length; i ++) {
+                console.log(tables[i].split(this.innerSeparator)[0] + " - " + tables[i].split(this.innerSeparator)[1]);
+            }
         }
     }
 }

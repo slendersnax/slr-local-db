@@ -28,3 +28,4 @@ aka everything is a localStorage entry
    - make columns have names - otherwise modifying tables is...weird
    - parse entries, table names etc. before entering them
    - check if database itself exists before operations
+   - better error handling
