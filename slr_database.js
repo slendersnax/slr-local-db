@@ -20,8 +20,13 @@ class SlrDB {
         return window.localStorage.getItem(key);
     }
 
-    remove = (key) => {
+    // originally this was localStorage.remove() but this works better in this case
+    setEmpty = (key) => {
         window.localStorage.setItem(key, "");
+    }
+
+    remove = (key) => {
+        window.localStorage.removeItem(key);
     }
 
     // quality of life functions
@@ -32,6 +37,7 @@ class SlrDB {
     }
 
     // checking if a table exists
+    // returns 0 if DOESN't, table's place in list of tables +1 if DOES
     isTable = (name) => {
         let tables = this.get(this.dbName).split(this.separator);
 
@@ -39,11 +45,11 @@ class SlrDB {
             let values = tables[i].split(this.innerSeparator);
 
             if(values[0] == name) {
-                return true;
+                return i + 1; // so that if i == 0 we still know the table exists
             }
         }
 
-        return false;
+        return 0;
     }
 
     // getting the number of a table's columns
@@ -71,7 +77,7 @@ class SlrDB {
         }
 
         // removing the main db entry (what to name this)
-        this.remove(this.dbName);
+        this.setEmpty(this.dbName);
     }
 
     // wrapper functions
@@ -83,8 +89,18 @@ class SlrDB {
     }
 
     deleteTable = (name) => {
-        // delete the table entry
-        // also delete its name and number of columns from the tables' names
+        let exists = this.isTable(name);
+        if(exists > 0) {
+            let tables = this.get(this.dbName).split(this.separator);
+            exists --;
+            this.remove(name);           // removing the localStorage entry of the table
+            tables.splice(exists, 1);    // removing the name of the table from the list of tables
+            this.set(this.dbName, tables.join(this.separator));    // updating the list of tables with the new value
+            console.log("MSG - table deleted successfully");
+        }
+        else {
+            console.log("MSG - ERR - no table with this name");
+        }
     }
 
     // value functions -----------------------------------------------------------------
@@ -95,14 +111,14 @@ class SlrDB {
             
             if(values.length == nTableColumns) {
                 this.addToField(name, values.join(this.innerSeparator));
-                console.log("MSG - values added");
+                console.log("MSG - values added successfully");
             }
             else {
-                console.log("MSG - not enough/too many values")
+                console.log("MSG - ERR - not enough/too many values");
             }
         }
         else {
-            console.log("MSG - no table with this name")
+            console.log("MSG - ERR - no table with this name");
         }
     }
 
