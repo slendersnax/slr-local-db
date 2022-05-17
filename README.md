@@ -11,19 +11,22 @@ aka everything is a localStorage entry
 ### to-do
 
 1. database
-   - create
-   - delete
+   - create DONE
+   - delete DONE
 2. tables
-   - create - there is only one database
-   - delete
+   - create - there is only one database DONE
+   - delete DONE
    - modify
       - create new columns
       - modify existing columns
       - delete columns
 3. entries
-   - add entry to table
-   - delete entry
+   - add entry to table DONE
+   - delete entry (by index) DONE
+      - maybe make other deletion methods too?
    - modify entry
 
 4. misc
    - make columns have names - otherwise modifying tables is...weird
+   - parse entries, table names etc. before entering them
+   - check if database itself exists before operations

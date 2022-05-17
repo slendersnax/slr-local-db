@@ -20,7 +20,7 @@ class SlrDB {
         return window.localStorage.getItem(key);
     }
 
-    // originally this was localStorage.remove() but this works better in this case
+    // important to make the distinction between this and complete removal
     setEmpty = (key) => {
         window.localStorage.setItem(key, "");
     }
@@ -32,8 +32,24 @@ class SlrDB {
     // quality of life functions
 
     // adding one value to a generic field
-    addToField = (name, content) => {
-        this.set(name, this.get(name) + content + this.separator);
+    addToField = (name, value) => {
+        let content = this.get(name);
+
+        if(content != "") {
+            this.set(name, content + this.separator + value);
+        }
+        else {
+            this.set(name, value);
+        }
+    }
+
+    deleteFromField = (name, index) => {
+        let content = this.get(name).split(this.separator);
+        content.splice(index, 1);
+
+        if(content.length > 0) { // if we had more than one entry
+            this.set(name, content.join(this.separator) + this.separator);
+        }
     }
 
     // checking if a table exists
@@ -66,7 +82,6 @@ class SlrDB {
     }
 
     // database functions -------------------------------------------------------------
-    // the only one we really need is resetting the database, deleting everything
     
     delDB = () => {
         let tables = this.get(this.dbName).split(this.separator);
@@ -79,8 +94,6 @@ class SlrDB {
         // removing the main db entry (what to name this)
         this.setEmpty(this.dbName);
     }
-
-    // wrapper functions
 
     // table functions -----------------------------------------------------------------
     addTable = (name, nOfColumns) => {
@@ -105,7 +118,7 @@ class SlrDB {
 
     // value functions -----------------------------------------------------------------
 
-    addToTable = (name, ...values) => {
+    addEntry = (name, ...values) => {
         if(this.isTable(name)) {
             let nTableColumns = this.getColumnNumber(name);
             
@@ -122,11 +135,21 @@ class SlrDB {
         }
     }
 
+    deleteEntry = (name, index) => {
+        if(this.isTable(name)) {
+            let tableContent = this.get(name).split(this.separator);
+
+            if(index < tableContent.length) {
+                tableContent.splice(index, 1);
+            }
+        }
+    }
+
     // for debugging
     printTableContent = (name) => {
         let content = this.get(name).split(this.separator);
 
-        for(let i = 0; i < content.length - 1; i ++) {
+        for(let i = 0; i < content.length; i ++) {
             console.log(content[i]);
         }
     }
@@ -134,7 +157,7 @@ class SlrDB {
     printTables = () => {
         let tables = this.get(this.dbName).split(this.separator);
 
-        for(let i = 0; i < tables.length - 1; i ++) {
+        for(let i = 0; i < tables.length; i ++) {
             console.log(tables[i].split(this.innerSeparator)[0] + " - " + tables[i].split(this.innerSeparator)[1]);
         }
     }
