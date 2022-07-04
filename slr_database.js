@@ -55,7 +55,7 @@ class SlrDB {
     }
 
     // checking if a table exists
-    // returns 0 if DOESN't, table's place in list of tables +1 if DOES
+    // returns -1 if DOESN't, table's place in list of tables if DOES
     isTable = (name) => {
         let tables = this.get(this.dbName).split(this.separator);
 
@@ -83,7 +83,21 @@ class SlrDB {
         }
     }
 
+    // getting the number of a table's rows/entries
 
+    getNumberOfEntries = (name) => {
+        let table = this.get(name).split(this.separator);
+
+        return table.length;
+    }
+
+    // getting the names of the tables in the form of an array
+
+    getTableNames = () => {
+        let tables = this.get(this.dbName).split(this.separator);
+        
+        return tables.map(item => item.split(this.innerSeparator)[0]);
+    }
 
     // database functions -------------------------------------------------------------
     
@@ -152,6 +166,32 @@ class SlrDB {
         }
         else {
             console.log("MSG - ERR - no table with this name");
+        }
+    }
+
+    // returns the entry in a given row in the form of an array
+    getEntry = (name, index) => {
+        index --;
+        let bChecked = false;
+        let msg = "";
+
+        if(this.isTable(name) > -1) {
+            if(index < this.getNumberOfEntries(name)) {
+                bChecked = true;
+                msg = "MSG - success";
+            }
+            else {
+                msg = "MSG - ERR - not enough entries";
+            }
+        }
+        else {
+            msg = "MSG - ERR - no table with this name."
+        }
+
+        console.log(msg);
+
+        if(bChecked) {
+            return this.get(name).split(this.separator)[index].split(this.innerSeparator);
         }
     }
 
