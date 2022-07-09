@@ -156,7 +156,6 @@ class SlrDB {
     }
 
     deleteEntry = (name, index) => {
-        index --; // because humans start counting from 1, but arrays start from 0
         if(this.isTable(name) > -1) {
             let tableContent = this.get(name).split(this.separator);
 
@@ -171,7 +170,6 @@ class SlrDB {
 
     // returns the entry in a given row in the form of an array
     getEntry = (name, index) => {
-        index --;
         let bChecked = false;
         let msg = "";
 
