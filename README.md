@@ -22,10 +22,13 @@ aka everything is a localStorage entry
    - add entry to table DONE
    - delete entry (by index) DONE
       - maybe make other deletion methods too?
-   - modify entry
+   - modify entry (by index)
 
 4. misc
    - make columns have names - otherwise modifying tables is...weird
    - parse entries, table names etc. before entering them
    - check if database itself exists before operations
-   - better error handling
+   - better error handling DONEish?
+      - it's much cleaner than before but is it better?
+
+   - maybe make it all part of only ONE big file?

@@ -56,7 +56,7 @@ class SlrDB {
 
     // checking if a table exists
     // returns -1 if DOESN't, table's place in list of tables if DOES
-    isTable = (name) => {
+    tableExists = (name) => {
         let tables = this.get(this.dbName).split(this.separator);
 
         for(let i = 0; i < tables.length; i ++) {
@@ -71,7 +71,7 @@ class SlrDB {
     }
 
     // getting the number of a table's columns
-    getColumnNumber = (name) => {
+    getNumberOfColumns = (name) => {
         let tables = this.get(this.dbName).split(this.separator);
 
         for(let i = 0; i < tables.length; i ++) {
@@ -122,16 +122,24 @@ class SlrDB {
     }
 
     deleteTable = (name) => {
-        let index = this.isTable(name);
+        let bChecked = false;
+        let msg;
+        let index = this.tableExists(name);
 
         if(index > -1) {
-            this.remove(name);           // removing the localStorage entry of the table
-            this.deleteFromField(this.dbName, index);
-            console.log("MSG - table deleted successfully");
+            bChecked = true;
         }
         else {
-            console.log("MSG - ERR - no table with this name");
+            msg = "MSG - ERR - no table with this name";
         }
+
+        if(bChecked) {
+            this.remove(name);                          // removing the localStorage entry of the table
+            this.deleteFromField(this.dbName, index);   // removing the table's name from the list of tables
+            msg = "MSG - table deleted successfully";
+        }
+
+        console.log(msg);
     }
 
 
@@ -139,44 +147,66 @@ class SlrDB {
     // value functions -----------------------------------------------------------------
 
     addEntry = (name, ...values) => {
-        if(this.isTable(name) > -1) {
-            let nTableColumns = this.getColumnNumber(name);
+        let bChecked = false;
+        let msg;
+
+        if(this.tableExists(name) > -1) {
+            let nTableColumns = this.getNumberOfColumns(name);
             
             if(values.length == nTableColumns) {
-                this.addToField(name, values.join(this.innerSeparator));
-                console.log("MSG - values added successfully");
+                bChecked = true;
             }
             else {
-                console.log("MSG - ERR - not enough/too many values");
+                msg = "MSG - ERR - not enough/too many values";
             }
         }
         else {
-            console.log("MSG - ERR - no table with this name");
+            msg = "MSG - ERR - no table with this name";111
         }
+
+        if(bChecked) {
+            this.addToField(name, values.join(this.innerSeparator));
+            msg = "MSG - values added successfully";
+        }
+
+        console.log(msg);
     }
 
     deleteEntry = (name, index) => {
-        if(this.isTable(name) > -1) {
+        let bChecked = false;
+        let msg;
+
+        if(this.tableExists(name) > -1) {
             let tableContent = this.get(name).split(this.separator);
 
             if(index < tableContent.length) {
-                this.deleteFromField(name, index);
+                bChecked = true;
+            }
+            else {
+                msg = "MSG - ERR - no entry with that index";
             }
         }
         else {
-            console.log("MSG - ERR - no table with this name");
+            msg = "MSG - ERR - no table with this name";
         }
+
+        if(bChecked) {
+            this.deleteFromField(name, index);
+            msg = "MSG - entry deleted successfully";
+        }
+
+        console.log(msg);
     }
 
     // returns the entry in a given row in the form of an array
     getEntry = (name, index) => {
         let bChecked = false;
-        let msg = "";
+        let msg;
 
-        if(this.isTable(name) > -1) {
+        if(this.tableExists(name) > -1) {
             if(index < this.getNumberOfEntries(name)) {
                 bChecked = true;
-                msg = "MSG - success";
+                msg = "MSG - successfully retrieved entry";
             }
             else {
                 msg = "MSG - ERR - not enough entries";

@@ -54,7 +54,7 @@ const appendTableNames = () => {
 const showTableContent = () => {
     let tableName = el_select.value;
     let nEntries = handler.getNumberOfEntries(tableName);
-    let nCols = handler.getColumnNumber(tableName);
+    let nCols = handler.getNumberOfColumns(tableName);
 
     removeChildren(el_table);
 
