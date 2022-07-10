@@ -31,4 +31,5 @@ aka everything is a localStorage entry
    - better error handling DONEish?
       - it's much cleaner than before but is it better?
 
-   - maybe make it all part of only ONE big file?
+   - maybe make it all part of only ONE big file
+      - separate fork
