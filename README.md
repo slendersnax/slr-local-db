@@ -25,7 +25,7 @@ aka everything is a localStorage entry
    - modify entry (by index)
 
 4. misc
-   - make columns have names - otherwise modifying tables is...weird
+   - make columns have names - otherwise modifying tables is...weird DONE
    - parse entries, table names etc. before entering them
    - check if database itself exists before operations
    - better error handling DONEish?
