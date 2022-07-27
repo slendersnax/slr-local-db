@@ -2,10 +2,10 @@
 let handler = new SlrDB();
 handler.delDB();
 
-handler.addTable("cars", 2);
-handler.addTable("students", 3);
-handler.addTable("dinosaur types", 1);
-handler.addTable("dinosaurs", 2);
+handler.addTable("cars", 2, "Brand", "Colour");
+handler.addTable("students", 3, "Name", "Major", "Current Year");
+handler.addTable("dinosaur types", 1, "type");
+handler.addTable("dinosaurs", 2, "Name", "Size");
 
 handler.addEntry("cars", "Ford", "Red");
 handler.addEntry("cars", "Porsche", "Black");
@@ -55,17 +55,28 @@ const showTableContent = () => {
     let tableName = el_select.value;
     let nEntries = handler.getNumberOfEntries(tableName);
     let nCols = handler.getNumberOfColumns(tableName);
-
-    removeChildren(el_table);
+    let nColNames = handler.getColumnNames(tableName);
 
     let titleRow = document.createElement("tr");
     let titleCell = document.createElement("th");
+    let columnNamesRow = document.createElement("tr");
+    
     titleRow.appendChild(titleCell);
-    el_table.appendChild(titleRow);
-
+    
     titleCell.innerHTML = tableName;
     titleCell.setAttribute("colspan", nCols);
     titleCell.setAttribute("text-align", "center");
+    
+    for(let i = 0; i < nCols; i ++) {
+        let th = document.createElement("th");
+        th.innerHTML = nColNames[i];
+        
+        columnNamesRow.appendChild(th);
+    }
+    
+    removeChildren(el_table);
+    el_table.appendChild(titleRow);
+    el_table.appendChild(columnNamesRow);
 
     for(let i = 0; i < nEntries; i ++) {
         let tr = document.createElement("tr");
