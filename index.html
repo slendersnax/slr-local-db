@@ -22,6 +22,25 @@
             body > #data {
                 flex: 3 0 70%;
             }
+            
+            #handling > div {
+                width: 90%;
+                margin: auto;
+                margin-top: 20px;
+            }
+            
+            #handling > div h4 {
+                color: #fff;
+            }
+            
+            #handling #column-name-container div {
+                display: flex;
+                width: 100%;
+            }
+            
+            #handling #column-name-container div input {
+                flex: 1 0 70%;
+            }
 
             #data {
                 color: #ccc;
@@ -54,10 +73,45 @@
 
     <body style="background: #000;">
         <section id="handling">
-            <select id="table-names">
-            </select>
-
-            <button id="show-table-content">show table content</button>
+            <!--showing table content-->
+            <div>
+                <table>
+                    <tr>
+                        <td colspan=2><h4>display table</h3></td>
+                    </tr>
+                    <tr>
+                        <td>
+                        <select class="table-names">
+                        </select>
+                        </td>
+                        <td><button id="show-table-content">show table content</button></td>
+                    </tr>
+                </table>
+            </div>
+            
+            <!--adding new table-->
+            <div>
+                <table>
+                    <tr>
+                        <td colspan=2><h4>add table</h3></td>
+                    </tr>
+                    <tr>
+                        <td colspan=2><button id="add-table">add new table</button></td>
+                    </tr>
+                    <tr>
+                        <td> 
+                            <input type="text" name="name" id="table-name" placeholder="table name" />
+                        </td>
+                        <td>
+                            <button id="add-column">add column</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan=2  id="column-name-container">
+                        </td>
+                    </tr>
+                </table>
+            </div>
         </section>
 
         <section id="data">

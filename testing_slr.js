@@ -2,10 +2,12 @@
 let handler = new SlrDB();
 handler.delDB();
 
-handler.addTable("cars", 2, "Brand", "Colour");
-handler.addTable("students", 3, "Name", "Major", "Current Year");
-handler.addTable("dinosaur types", 1, "type");
-handler.addTable("dinosaurs", 2, "Name", "Size");
+let test = ["Brand", "Colour"]
+
+handler.addTable("cars", 2, test);
+handler.addTable("students", 3, ["Name", "Major", "Current Year"]);
+handler.addTable("dinosaur types", 1, ["type"]);
+handler.addTable("dinosaurs", 2, ["Name", "Size"]);
 
 handler.addEntry("cars", "Ford", "Red");
 handler.addEntry("cars", "Porsche", "Black");
@@ -24,8 +26,13 @@ handler.addEntry("dinosaurs", "Diplodocus", "big");
 handler.addEntry("dinosaurs", "Minirex", "smol");
 
 // testing --------------------
-let el_select = document.getElementById("table-names");
-let el_button = document.getElementById("show-table-content");
+let el_select = document.getElementsByClassName("table-names");
+let el_buttonShowTable = document.getElementById("show-table-content");
+
+let el_addTable = document.getElementById("add-table");
+let el_addColumn = document.getElementById("add-column");
+let el_columnNamesContainer = document.getElementById("column-name-container");
+
 
 let el_table = document.getElementById("content");
 
@@ -37,20 +44,26 @@ const removeChildren = (elem) => {
     }
 }
 
-const appendTableNames = () => {
+// add table names to dropdown list
+const listTableNames = () => {
     let tables = handler.getTableNames();
     
-    removeChildren(el_select);
+    for(let i = 0; i < el_select.length; i ++) {
+        removeChildren(el_select[i]);
+    }
 
     for(let i = 0; i < tables.length; i ++) {
         let option = document.createElement("option");
         option.innerHTML = tables[i];
         option.value = tables[i];
-
-        el_select.appendChild(option);
+        
+        for(let j = 0; j < el_select.length; j ++) {
+            el_select[j].appendChild(option);
+        }
     }
 }
 
+// displaying a table on the right
 const showTableContent = () => {
     let tableName = el_select.value;
     let nEntries = handler.getNumberOfEntries(tableName);
@@ -93,8 +106,47 @@ const showTableContent = () => {
     }
 }
 
-appendTableNames();
+const addColumnInput = () => {
+    let colCont = document.createElement("div");
+    let newCol = document.createElement("input");
+    let delCol = document.createElement("button");
+    
+    newCol.setAttribute("type", "text");
+    newCol.setAttribute("placeholder", "column name");
+    delCol.innerHTML = "delete column";
+    delCol.addEventListener("click", function() {
+        colCont.parentNode.removeChild(colCont);
+    });
+    
+    colCont.appendChild(newCol);
+    colCont.appendChild(delCol);
+    
+    el_columnNamesContainer.appendChild(colCont);
+}
 
-el_button.addEventListener("click", function() {
+const addTable = () => {
+    let name = document.getElementById("table-name").value;
+    let nOfColumns = el_columnNamesContainer.children.length;
+    
+    let nameInputs = [];
+    for(let i = 0; i < el_columnNamesContainer.children.length; i ++) {
+        nameInputs[i] = el_columnNamesContainer.children[i].getElementsByTagName("input")[0].value;
+    }
+    
+    handler.addTable(name, nOfColumns, nameInputs);
+    listTableNames();
+}
+
+el_addColumn.addEventListener("click", function() {
+    addColumnInput();
+});
+
+el_addTable.addEventListener("click", function() {
+    addTable();
+});
+
+el_buttonShowTable.addEventListener("click", function() {
     showTableContent();
 });
+
+listTableNames();

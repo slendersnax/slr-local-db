@@ -113,7 +113,7 @@ class SlrDB {
 
 
     // table functions -----------------------------------------------------------------
-    addTable = (name, nOfColumns, ...columnNames) => {
+    addTable = (name, nOfColumns, columnNames) => {
         let bChecked = false;
         let msg;
         
