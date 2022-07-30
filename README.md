@@ -27,9 +27,10 @@ aka everything is a localStorage entry
 4. misc
    - make columns have names - otherwise modifying tables is...weird DONE
    - parse entries, table names etc. before entering them
-   - check if database itself exists before operations
+   - check if database itself exists before operations NO NEED AS CONSTRUCTOR DOES THIS ALREADY
    - better error handling DONEish?
       - it's much cleaner than before but is it better?
+      - make it with throw
 
    - maybe make it all part of only ONE big file
       - separate fork

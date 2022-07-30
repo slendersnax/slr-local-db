@@ -65,7 +65,7 @@ const listTableNames = () => {
 
 // displaying a table on the right
 const showTableContent = () => {
-    let tableName = el_select.value;
+    let tableName = el_select[0].value;
     let nEntries = handler.getNumberOfEntries(tableName);
     let nCols = handler.getNumberOfColumns(tableName);
     let nColNames = handler.getColumnNames(tableName);

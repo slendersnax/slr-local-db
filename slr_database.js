@@ -110,21 +110,45 @@ class SlrDB {
         // removing the main db entry (what to name this)
         this.setEmpty(this.dbName);
     }
-
-
+    
+    // column names can either be given as a list of variables
+    // or as an array
+    verifyColumnNames = (columnNames) => {
+        let type = typeof(columnNames[0]);
+        
+        if(type == "string") {
+            return 1;
+        }
+        if(type == "object") { // aka array of strings
+            return -1;
+        }
+        
+        return 0;
+    } 
+    
     // table functions -----------------------------------------------------------------
-    addTable = (name, nOfColumns, columnNames) => {
+    addTable = (name, nOfColumns, ...columnNames) => {
         let bChecked = false;
         let msg;
+        let cntype = this.verifyColumnNames(columnNames);
+        let cn;
         
         if(this.indexOfTable(name) == -1) {
             if(typeof(nOfColumns) == "number") {
                 nOfColumns = Math.floor(nOfColumns)
-                if(columnNames.length == nOfColumns) {
-                    bChecked = true;
+                
+                if(cntype != 0) {
+                    cn = cntype == 1 ? columnNames : columnNames[0];
+            
+                    if(cn.length == nOfColumns) {
+                        bChecked = true;
+                    }
+                    else {
+                        msg = "MSG - ERR - there must be " + nOfColumns + " column names provided.";
+                    }
                 }
                 else {
-                    msg = "MSG - ERR - there must be " + nOfColumns + " column names provided.";
+                    msg = "MSG - ERR - column names must be provided as multiple separate values or as an array.";
                 }
             }
             else {
@@ -137,7 +161,7 @@ class SlrDB {
         
         if(bChecked) {
             this.set(name, "");
-            let newTable = name + this.innerSeparator + nOfColumns + this.innerSeparator + columnNames.join(this.innerSeparator)
+            let newTable = name + this.innerSeparator + nOfColumns + this.innerSeparator + cn.join(this.innerSeparator)
             this.addToField(this.dbName, newTable);
             msg = "MSG - table added successfully";
         }
