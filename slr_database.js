@@ -96,6 +96,22 @@ class SlrDB {
     getNumberOfEntries = (name) => {
         return this.get(name).split(this.separator).length;
     }
+    
+    // items can either be given as a list of variables
+    // or as an array
+    // used when checking the format of column names and variables in a new entry
+    verifyItems = (items) => {
+        let type = typeof(items[0]);
+        
+        if(type == "string") {
+            return 1;
+        }
+        if(type == "object") { // aka array of strings
+            return -1;
+        }
+        
+        return 0;
+    } 
 
     // database functions -------------------------------------------------------------
     
@@ -111,26 +127,11 @@ class SlrDB {
         this.setEmpty(this.dbName);
     }
     
-    // column names can either be given as a list of variables
-    // or as an array
-    verifyColumnNames = (columnNames) => {
-        let type = typeof(columnNames[0]);
-        
-        if(type == "string") {
-            return 1;
-        }
-        if(type == "object") { // aka array of strings
-            return -1;
-        }
-        
-        return 0;
-    } 
-    
     // table functions -----------------------------------------------------------------
     addTable = (name, nOfColumns, ...columnNames) => {
         let bChecked = false;
         let msg;
-        let cntype = this.verifyColumnNames(columnNames);
+        let cntype = this.verifyItems(columnNames);
         let cn;
         
         if(this.indexOfTable(name) == -1) {
@@ -196,13 +197,19 @@ class SlrDB {
     addEntry = (name, ...values) => {
         let bChecked = false;
         let msg;
+        let valType = this.verifyItems(values);
+        let vals;
 
         if(this.indexOfTable(name) > -1) {
-            if(values.length == this.getNumberOfColumns(name)) {
-                bChecked = true;
-            }
-            else {
-                msg = "MSG - ERR - not enough/too many values";
+            if(valType != 0) {
+                vals = valType == 1 ? values : values[0];
+                
+                if(vals.length == this.getNumberOfColumns(name)) {
+                    bChecked = true;
+                }
+                else {
+                    msg = "MSG - ERR - not enough/too many values";
+                }
             }
         }
         else {
@@ -210,7 +217,7 @@ class SlrDB {
         }
 
         if(bChecked) {
-            this.addToField(name, values.join(this.innerSeparator));
+            this.addToField(name, vals.join(this.innerSeparator));
             msg = "MSG - values added successfully";
         }
 
