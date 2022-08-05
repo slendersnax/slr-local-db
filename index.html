@@ -41,6 +41,11 @@
             #handling #column-name-container div input {
                 flex: 1 0 70%;
             }
+            
+            #handling > div > table tr td button {
+                text-align: middle;
+                width: 100%;
+            }
 
             #data {
                 color: #ccc;
@@ -73,18 +78,22 @@
 
     <body style="background: #000;">
         <section id="handling">
-            <!--showing table content-->
+            <!--working with tables: showing content, deleting, adding content-->
             <div>
                 <table>
                     <tr>
                         <td colspan=2><h4>display table</h3></td>
                     </tr>
                     <tr>
-                        <td>
-                        <select class="table-names">
-                        </select>
-                        </td>
+                        <td><select class="table-names"></select></td>
                         <td><button id="show-table-content">show table content</button></td>
+                    </tr>
+                    <tr>
+                        <td rowspan=2></td>
+                        <td><button id="delete-table">delete table</button></td>
+                    </tr>
+                    <tr>
+                        <td><button id="add-entry">add entry</button></td>
                     </tr>
                 </table>
             </div>
@@ -94,9 +103,6 @@
                 <table>
                     <tr>
                         <td colspan=2><h4>add table</h3></td>
-                    </tr>
-                    <tr>
-                        <td colspan=2><button id="add-table">add new table</button></td>
                     </tr>
                     <tr>
                         <td> 
@@ -109,6 +115,9 @@
                     <tr>
                         <td colspan=2  id="column-name-container">
                         </td>
+                    </tr>
+                    <tr>
+                        <td colspan=2><button id="add-table">add new table</button></td>
                     </tr>
                 </table>
             </div>

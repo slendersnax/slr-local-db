@@ -165,9 +165,11 @@ class SlrDB {
             let newTable = name + this.innerSeparator + nOfColumns + this.innerSeparator + cn.join(this.innerSeparator)
             this.addToField(this.dbName, newTable);
             msg = "MSG - table added successfully";
+            console.log(msg);
         }
-        
-        console.log(msg);
+        else {
+            throw msg;
+        }
     }
 
     deleteTable = (name) => {
@@ -185,11 +187,12 @@ class SlrDB {
             this.remove(name);                          // removing the localStorage entry of the table
             this.deleteFromField(this.dbName, index);   // removing the table's name from the list of tables
             msg = "MSG - table deleted successfully";
+            console.log(msg);
         }
-
-        console.log(msg);
+        else {
+            throw msg;
+        }
     }
-
 
 
     // value functions -----------------------------------------------------------------
@@ -219,9 +222,11 @@ class SlrDB {
         if(bChecked) {
             this.addToField(name, vals.join(this.innerSeparator));
             msg = "MSG - values added successfully";
+            console.log(msg);
         }
-
-        console.log(msg);
+        else {
+            throw msg;
+        }
     }
 
     deleteEntry = (name, index) => {
@@ -245,9 +250,11 @@ class SlrDB {
         if(bChecked) {
             this.deleteFromField(name, index);
             msg = "MSG - entry deleted successfully";
+            console.log(msg);
         }
-
-        console.log(msg);
+        else {
+            throw msg;
+        }
     }
 
     // returns the entry in a given row in the form of an array
@@ -268,10 +275,12 @@ class SlrDB {
             msg = "MSG - ERR - no table with this name."
         }
 
-        console.log(msg);
-
         if(bChecked) {
+            console.log(msg);
             return this.get(name).split(this.separator)[index].split(this.innerSeparator);
+        }
+        else {
+            throw msg;
         }
     }
 

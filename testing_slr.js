@@ -118,6 +118,7 @@ const addColumnInput = () => {
         colCont.parentNode.removeChild(colCont);
     });
     
+    colCont.style.height = "22px";
     colCont.appendChild(newCol);
     colCont.appendChild(delCol);
     
