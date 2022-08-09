@@ -86,7 +86,7 @@ class SlrDB {
     
     // getting the names of a table's columns
     getColumnNames = (name) => {
-        let columnNames = this.get(this.dbName).split(this.separator)[this.indexOfTable(name)].split(this.innerSeparator);
+        let columnNames = this.getTablesAttrs()[this.indexOfTable(name)].split(this.innerSeparator);
         columnNames.splice(0, 2); // deleting the name and number of columns from the beginning of the array
         
         return columnNames;
