@@ -30,7 +30,13 @@ aka everything is a localStorage entry
    - check if database itself exists before operations NO NEED AS CONSTRUCTOR DOES THIS ALREADY
    - better error handling DONEish?
       - it's much cleaner than before but is it better?
-      - make it with throw
+      - make it with throw - DONE
 
    - maybe make it all part of only ONE big file
       - separate fork
+
+### description
+An idea to use the very simple localStorage API as the basic get/set mechanism in a relational database handler(is that what they're called? anyway).
+You can check my progress in the to-do list above. 
+
+Since starting this project I've become more comfortable with learning about and modifying existing technologies rathen than building mine from the ground up, but I'll still finish this (eventually) and clean it up (definitely). 
