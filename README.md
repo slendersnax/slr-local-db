@@ -40,3 +40,6 @@ An idea to use the very simple localStorage API as the basic get/set mechanism i
 You can check my progress in the to-do list above. 
 
 Since starting this project I've become more comfortable with learning about and modifying existing technologies rathen than building mine from the ground up, but I'll still finish this (eventually) and clean it up (definitely). 
+
+
+Update Oct 2022, leaving it as it is now. I might come back later to clean it up/complete it, though it's not bad as it is.
