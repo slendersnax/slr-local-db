@@ -7,7 +7,7 @@ let test = ["Brand", "Colour"]
 handler.addTable("cars", 2, test);
 handler.addTable("students", 3, ["Name", "Major", "Current Year"]);
 handler.addTable("dinosaur types", 1, ["type"]);
-handler.addTable("dinosaurs", 2, ["Name", "Size"]);
+handler.addTable("dinosaurs", 2, "Name", "Size");
 
 handler.addEntry("cars", "Ford", "Red");
 handler.addEntry("cars", "Porsche", "Black");
@@ -33,6 +33,8 @@ let el_addTable = document.getElementById("add-table");
 let el_addColumn = document.getElementById("add-column");
 let el_columnNamesContainer = document.getElementById("column-name-container");
 
+let el_nOfItems_select = document.getElementById("table-numberof-items");
+let el_buttonDeleteEntry = document.getElementById("delete-entry");
 
 let el_table = document.getElementById("content");
 
@@ -60,6 +62,18 @@ const listTableNames = () => {
         for(let j = 0; j < el_select.length; j ++) {
             el_select[j].appendChild(option);
         }
+    }
+}
+
+const listTableItemNumber = () => {
+    let nOfItems = handler.getNumberOfEntries(el_select[0].value);
+
+    for(let i = 0; i < nOfItems; i ++) {
+        let option = document.createElement("option");
+        option.innerHTML = i;
+        option.value = i;
+
+        el_nOfItems_select.appendChild(option);
     }
 }
 
@@ -138,6 +152,10 @@ const addTable = () => {
     listTableNames();
 }
 
+const deleteEntry = () => {
+    handler.deleteEntry(el_select[0].value, parseInt(el_nOfItems_select.value));
+}
+
 el_addColumn.addEventListener("click", function() {
     addColumnInput();
 });
@@ -146,8 +164,13 @@ el_addTable.addEventListener("click", function() {
     addTable();
 });
 
-el_buttonShowTable.addEventListener("click", function() {
+el_buttonShowTable.addEventListener("click", showTableContent);
+
+el_buttonDeleteEntry.addEventListener("click", function() {
+    deleteEntry();
     showTableContent();
-});
+})
 
 listTableNames();
+showTableContent();
+listTableItemNumber();

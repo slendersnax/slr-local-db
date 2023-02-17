@@ -22,7 +22,7 @@ aka everything is a localStorage entry
    - [x] add entry to table
    - [x] delete entry (by index)
       - [ ] maybe make other deletion methods too?
-   - [ ] modify entry (by index)
+   - [x] modify entry (by index)
 
 4. misc
    - [x] make columns have names - otherwise modifying tables is...weird

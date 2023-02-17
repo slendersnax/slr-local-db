@@ -52,18 +52,15 @@ class SlrDB {
     }
     
     // table helper functions
-    // getting the names of the tables in the form of an array
-    
+
+    // getting the names and attributes of the tables in the form of an array
     getTablesAttrs = () => {
         return this.get(this.dbName).split(this.separator);
     }
-    
-    getTableNames = () => {
-        return this.getTablesAttrs().map(item => item.split(this.innerSeparator)[0]);
-    }
-    
-    getTableData = (name) => {
-        let tableArr = this.getTablesAttrs()[this.indexOfTable(name)].split(this.innerSeparator);
+
+    // getting the names and attributes of a table in the form of an object
+    getTableData = (tableName) => {
+        let tableArr = this.getTablesAttrs()[this.indexOfTable(tableName)].split(this.innerSeparator);
         let data = {
             name: tableArr[0],
             nOfColumns: tableArr[1],
@@ -73,28 +70,35 @@ class SlrDB {
         return data;
     }
     
+    getTableNames = () => {
+        return this.getTablesAttrs().map(item => item.split(this.innerSeparator)[0]);
+    }
+    
     // checking if a table exists
     // returns -1 if DOESN't, table's place in list of tables if DOES
-    indexOfTable = (name) => {
-        return this.getTableNames().indexOf(name);
+    indexOfTable = (tableName) => {
+        return this.getTableNames().indexOf(tableName);
     }
 
     // getting the number of a table's columns
-    getNumberOfColumns = (name) => {
-        return this.getTablesAttrs()[this.indexOfTable(name)].split(this.innerSeparator)[1];
+    getNumberOfColumns = (tableName) => {
+        return this.getTablesAttrs()[this.indexOfTable(tableName)].split(this.innerSeparator)[1];
     }
     
     // getting the names of a table's columns
-    getColumnNames = (name) => {
-        let columnNames = this.getTablesAttrs()[this.indexOfTable(name)].split(this.innerSeparator);
+    getColumnNames = (tableName) => {
+        let columnNames = this.getTablesAttrs()[this.indexOfTable(tableName)].split(this.innerSeparator);
         columnNames.splice(0, 2); // deleting the name and number of columns from the beginning of the array
         
         return columnNames;
     }
 
     // getting the number of a table's rows/entries
-    getNumberOfEntries = (name) => {
-        return this.get(name).split(this.separator).length;
+    getNumberOfEntries = (tableName) => {
+        if(this.indexOfTable(tableName) > -1)
+            return this.get(tableName).split(this.separator).length;
+        else
+            throw "MSG - ERR - no table with this name";
     }
     
     // items can either be given as a list of variables
@@ -103,12 +107,11 @@ class SlrDB {
     verifyItems = (items) => {
         let type = typeof(items[0]);
         
-        if(type == "string") {
+        if(type == "string")
             return 1;
-        }
-        if(type == "object") { // aka array of strings
+
+        if(type == "object") // aka array of strings
             return -1;
-        }
         
         return 0;
     } 
@@ -123,18 +126,18 @@ class SlrDB {
             this.remove(tableNames[i]);
         }
 
-        // removing the main db entry (what to name this)
+        // removing the main db entry (what to name this?)
         this.setEmpty(this.dbName);
     }
     
     // table functions -----------------------------------------------------------------
-    addTable = (name, nOfColumns, ...columnNames) => {
+    addTable = (tableName, nOfColumns, ...columnNames) => {
         let bChecked = false;
         let msg;
         let cntype = this.verifyItems(columnNames);
         let cn;
         
-        if(this.indexOfTable(name) == -1) {
+        if(this.indexOfTable(tableName) == -1) {
             if(typeof(nOfColumns) == "number") {
                 nOfColumns = Math.floor(nOfColumns)
                 
@@ -161,8 +164,8 @@ class SlrDB {
         }
         
         if(bChecked) {
-            this.set(name, "");
-            let newTable = name + this.innerSeparator + nOfColumns + this.innerSeparator + cn.join(this.innerSeparator)
+            this.set(tableName, "");
+            let newTable = tableName + this.innerSeparator + nOfColumns + this.innerSeparator + cn.join(this.innerSeparator)
             this.addToField(this.dbName, newTable);
             msg = "MSG - table added successfully";
             console.log(msg);
@@ -172,11 +175,11 @@ class SlrDB {
         }
     }
 
-    deleteTable = (name) => {
+    deleteTable = (tableName) => {
         let bChecked = false;
         let msg;
 
-        if(this.indexOfTable(name) > -1) {
+        if(this.indexOfTable(tableName) > -1) {
             bChecked = true;
         }
         else {
@@ -184,7 +187,7 @@ class SlrDB {
         }
 
         if(bChecked) {
-            this.remove(name);                          // removing the localStorage entry of the table
+            this.remove(tableName);                          // removing the localStorage entry of the table
             this.deleteFromField(this.dbName, index);   // removing the table's name from the list of tables
             msg = "MSG - table deleted successfully";
             console.log(msg);
@@ -197,17 +200,17 @@ class SlrDB {
 
     // value functions -----------------------------------------------------------------
 
-    addEntry = (name, ...values) => {
+    addEntry = (tableName, ...values) => {
         let bChecked = false;
         let msg;
         let valType = this.verifyItems(values);
         let vals;
 
-        if(this.indexOfTable(name) > -1) {
+        if(this.indexOfTable(tableName) > -1) {
             if(valType != 0) {
                 vals = valType == 1 ? values : values[0];
                 
-                if(vals.length == this.getNumberOfColumns(name)) {
+                if(vals.length == this.getNumberOfColumns(tableName)) {
                     bChecked = true;
                 }
                 else {
@@ -216,11 +219,11 @@ class SlrDB {
             }
         }
         else {
-            msg = "MSG - ERR - no table with this name";111
+            msg = "MSG - ERR - no table with this name";
         }
 
         if(bChecked) {
-            this.addToField(name, vals.join(this.innerSeparator));
+            this.addToField(tableName, vals.join(this.innerSeparator));
             msg = "MSG - values added successfully";
             console.log(msg);
         }
@@ -229,14 +232,56 @@ class SlrDB {
         }
     }
 
-    deleteEntry = (name, index) => {
+    modifyEntry = (tableName, index, columnName, newValue) => {
+        let bChecked = false;
+        let msg;
+        let colIndex;
+
+        if(this.indexOfTable(tableName) > -1) {
+            if(index < this.getNumberOfEntries(tableName)) {
+                colIndex = this.getColumnNames(tableName).indexOf(columnName);
+                if(colIndex > -1) {
+                    bChecked = true;
+                }
+                else {
+                    msg = "MSG - ERR - no column with that name in this table";
+                }
+            }
+            else {
+                msg = "MSG - ERR - no entry with that index";
+            }
+        }
+        else {
+            msg = "MSG - ERR - no table with this name";
+        }
+
+        // should work on this somehow
+        // what we're doing here is we're getting all the entries
+        // then modifying THAT ONE VALUE and rejoining everything together
+        if(bChecked) {
+            let allEntries = this.getAllEntries(tableName);
+            let newTableVal = [];
+
+            allEntries[index][colIndex] = newValue;
+
+            for(let i = 0; i < allEntries.length; i ++) {
+                newTableVal[i] = allEntries[i].join(this.innerSeparator);
+            }
+
+            this.set(tableName, newTableVal.join(this.separator));
+            console.log(msg);
+        }
+        else {
+            throw msg;
+        }
+    }
+
+    deleteEntry = (tableName, index) => {
         let bChecked = false;
         let msg;
 
-        if(this.indexOfTable(name) > -1) {
-            let tableContent = this.get(name).split(this.separator);
-
-            if(index < tableContent.length) {
+        if(this.indexOfTable(tableName) > -1) {
+            if(index < this.getNumberOfEntries(tableName)) {
                 bChecked = true;
             }
             else {
@@ -248,7 +293,7 @@ class SlrDB {
         }
 
         if(bChecked) {
-            this.deleteFromField(name, index);
+            this.deleteFromField(tableName, index);
             msg = "MSG - entry deleted successfully";
             console.log(msg);
         }
@@ -258,12 +303,12 @@ class SlrDB {
     }
 
     // returns the entry in a given row in the form of an array
-    getEntry = (name, index) => {
+    getEntry = (tableName, index) => {
         let bChecked = false;
         let msg;
 
-        if(this.indexOfTable(name) > -1) {
-            if(index < this.getNumberOfEntries(name)) {
+        if(this.indexOfTable(tableName) > -1) {
+            if(index < this.getNumberOfEntries(tableName)) {
                 bChecked = true;
                 msg = "MSG - successfully retrieved entry";
             }
@@ -277,11 +322,22 @@ class SlrDB {
 
         if(bChecked) {
             console.log(msg);
-            return this.get(name).split(this.separator)[index].split(this.innerSeparator);
+            return this.get(tableName).split(this.separator)[index].split(this.innerSeparator);
         }
         else {
             throw msg;
         }
+    }
+
+    getAllEntries = (tableName) => {
+        let nEntries = this.getNumberOfEntries(tableName);
+        let m_entries = [];
+
+        for(let i = 0; i < nEntries; i ++) {
+            m_entries[i] = this.getEntry(tableName, i);
+        }
+
+        return m_entries;
     }
 
     // for debugging
