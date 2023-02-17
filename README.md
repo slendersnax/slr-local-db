@@ -9,31 +9,31 @@ aka everything is a localStorage entry
 ### to-do
 
 1. database
-   - create DONE
-   - delete DONE
+   - [x] create
+   - [x] delete
 2. tables
-   - create - there is only one database DONE
-   - delete DONE
+   - [x] create - there is only one database
+   - [x] delete
    - modify
-      - create new columns
-      - modify existing columns
-      - delete columns
+      - [ ] create new columns
+      - [ ] modify existing columns
+      - [ ] delete columns
 3. entries
-   - add entry to table DONE
-   - delete entry (by index) DONE
-      - maybe make other deletion methods too?
-   - modify entry (by index)
+   - [x] add entry to table
+   - [x] delete entry (by index)
+      - [ ] maybe make other deletion methods too?
+   - [ ] modify entry (by index)
 
 4. misc
-   - make columns have names - otherwise modifying tables is...weird DONE
-   - parse entries, table names etc. before entering them
-   - check if database itself exists before operations NO NEED AS CONSTRUCTOR DOES THIS ALREADY
-   - better error handling DONEish?
+   - [x] make columns have names - otherwise modifying tables is...weird
+   - [ ] parse entries, table names etc. before entering them
+   - [x] check if database itself exists before operations NO NEED AS CONSTRUCTOR DOES THIS ALREADY
+   - [ ] better error handling DONEish?
       - it's much cleaner than before but is it better?
-      - make it with throw - DONE
+      - [x] make it with throw
 
-   - maybe make it all part of only ONE big file
-      - separate fork
+   - [ ] maybe make it all part of only ONE big file
+      - [ ] separate fork
 
 ### description
 An idea to use the very simple localStorage API as the basic get/set mechanism in a relational database handler(is that what they're called? anyway).
