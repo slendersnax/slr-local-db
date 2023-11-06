@@ -31,9 +31,7 @@ aka everything is a localStorage entry
    - [ ] better error handling DONEish?
       - it's much cleaner than before but is it better?
       - [x] make it with throw
-
-   - [ ] maybe make it all part of only ONE big file
-      - [ ] separate fork
+   - [ ] add a real **id** field to entries?
 
 ### description
 An idea to use the very simple localStorage API as the basic get/set mechanism in a relational database handler(is that what they're called? anyway).
@@ -43,33 +41,35 @@ Since starting this project I've become more comfortable with learning about and
 
 ### usage
 
-You can just add another `<script>` tag and include it, or an `export` directive at the bottom of the file, then create an `SlrDB` object. Modifying the data is done through this object's methods.
+Create an `SlrDB` object. Modifying the data is done through this object's methods. Not all of them require a description since (imo) they have pretty self-descriptive names, but there are some quirks with a few of them.
 
-Helper functions:
+An additional note: the **index** parameter that some functions use does not exist as a column in the tables themselves, it simply refers to the index an item would have if each entry was an item in an array. This means that indexes start at 0 and the index of each item changes upon deleting an item before them.
 
-`getTableNames()`: Returns an array with the names of all the tables in the database.
+Helper functions / methods:
 
-`getTableData(tableName)`: Get the data of the table with `tableName` in the form of an object which contains the `name`, number of columns (`nOfColumns`), and an array called `columnNames`. The latter two can also be retrieved using `getNumberOfColumns(tableName)`and `getColumnNames(tableName)`, respectively.
+`getTableNames()`:
 
-`getNumberOfEntries(tableName)`: Get the number of entries in the table with `tableName`.
+`getTableData(tableName)`: Get the data of the table with **tableName** in the form of an object which contains the following properties: **name**, **nOfColumns**, **columnNames** (an array). The latter two can also be retrieved using `getNumberOfColumns(tableName)`and `getColumnNames(tableName)`, respectively.
+
+`getNumberOfEntries(tableName)`
 
 Data modification functions:
 
 `delDB()`: It deletes all the data in the database - it deletes all the LocalStorage table entries but only *empties* the database entry so that it can be used for future operations.
 
-`addTable(tableName, nOfColumns, ...columnNames)`: Add a table with the specified `tableName`, `number of columns` and a list of `ccolumnNames` which can either be a list of strings, or an array of strings.
+`addTable(tableName, nOfColumns, ...columnNames)`: **columnNames** can either be a list of separate strings as arguments, or an array of strings.
 
-`deleteTable(tableName)`: Delete the table with the specified name (if it exists).
+`deleteTable(tableName)`
 
-`addEntry(tableName, ...values)`: Add an entry into the table with `tableName` - the `values` can either be an array with a length ofthe table's columns, or individual variables with the same length.
+`addEntry(tableName, ...values)`: **values** can either be an array with a length equal to the table's columns, or a list of individual variables with the same length.
 
-`modifyEntry(tableName, index, columnName, newValue)`: Modify an entry by `index` in `tableName` - change the old value in `columnName` with the `newValue`.
+`modifyEntry(tableName, index, columnName, newValue)`
 
-`deleteEntry(tableName, index)`: Delete an entry by `index` from `tableName`.
+`deleteEntry(tableName, index)`
 
-`getEntry(tableName, index)`: Retrieve the entry by `index` from `tableName`.
+`getEntry(tableName, index)`
 
-`getAllEntries(tableName)`: Retrieve all the entries from the table with `tableName`.
+`getAllEntries(tableName)`
 
 
 There are a few more, but those are helper *helper* functions that are used internally, so I won't include them here.

@@ -49,7 +49,7 @@ const removeChildren = (elem) => {
 // add table names to dropdown list
 const listTableNames = () => {
     let tables = handler.getTableNames();
-    
+
     for(let i = 0; i < el_select.length; i ++) {
         removeChildren(el_select[i]);
     }
@@ -58,15 +58,17 @@ const listTableNames = () => {
         let option = document.createElement("option");
         option.innerHTML = tables[i];
         option.value = tables[i];
-        
+
         for(let j = 0; j < el_select.length; j ++) {
             el_select[j].appendChild(option);
         }
     }
 }
 
+// list the indexes of the items of the current table
 const listTableItemNumber = () => {
     let nOfItems = handler.getNumberOfEntries(el_select[0].value);
+    removeChildren(el_nOfItems_select);
 
     for(let i = 0; i < nOfItems; i ++) {
         let option = document.createElement("option");
@@ -87,20 +89,20 @@ const showTableContent = () => {
     let titleRow = document.createElement("tr");
     let titleCell = document.createElement("th");
     let columnNamesRow = document.createElement("tr");
-    
+
     titleRow.appendChild(titleCell);
-    
+
     titleCell.innerHTML = tableName;
     titleCell.setAttribute("colspan", nCols);
     titleCell.setAttribute("text-align", "center");
-    
+
     for(let i = 0; i < nCols; i ++) {
         let th = document.createElement("th");
         th.innerHTML = nColNames[i];
-        
+
         columnNamesRow.appendChild(th);
     }
-    
+
     removeChildren(el_table);
     el_table.appendChild(titleRow);
     el_table.appendChild(columnNamesRow);
@@ -112,7 +114,7 @@ const showTableContent = () => {
         for(j = 0; j < nCols; j ++) {
             let td = document.createElement("td");
             td.innerHTML = entry[j];
-            
+
             tr.appendChild(td);
         }
 
@@ -124,30 +126,30 @@ const addColumnInput = () => {
     let colCont = document.createElement("div");
     let newCol = document.createElement("input");
     let delCol = document.createElement("button");
-    
+
     newCol.setAttribute("type", "text");
     newCol.setAttribute("placeholder", "column name");
     delCol.innerHTML = "delete column";
     delCol.addEventListener("click", function() {
         colCont.parentNode.removeChild(colCont);
     });
-    
+
     colCont.style.height = "22px";
     colCont.appendChild(newCol);
     colCont.appendChild(delCol);
-    
+
     el_columnNamesContainer.appendChild(colCont);
 }
 
 const addTable = () => {
     let name = document.getElementById("table-name").value;
     let nOfColumns = el_columnNamesContainer.children.length;
-    
+
     let nameInputs = [];
     for(let i = 0; i < el_columnNamesContainer.children.length; i ++) {
         nameInputs[i] = el_columnNamesContainer.children[i].getElementsByTagName("input")[0].value;
     }
-    
+
     handler.addTable(name, nOfColumns, nameInputs);
     listTableNames();
 }
@@ -156,20 +158,20 @@ const deleteEntry = () => {
     handler.deleteEntry(el_select[0].value, parseInt(el_nOfItems_select.value));
 }
 
-el_addColumn.addEventListener("click", function() {
-    addColumnInput();
-});
+el_addColumn.addEventListener("click", addColumnInput);
 
-el_addTable.addEventListener("click", function() {
-    addTable();
-});
+el_addTable.addEventListener("click", addTable);
 
-el_buttonShowTable.addEventListener("click", showTableContent);
+el_buttonShowTable.addEventListener("click", function() {
+    showTableContent();
+    listTableItemNumber();
+});
 
 el_buttonDeleteEntry.addEventListener("click", function() {
     deleteEntry();
     showTableContent();
-})
+    listTableItemNumber();
+});
 
 listTableNames();
 showTableContent();
