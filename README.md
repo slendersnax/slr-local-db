@@ -47,7 +47,7 @@ An additional note: the **index** parameter that some functions use does not exi
 
 Helper functions / methods:
 
-`getTableNames()`:
+`getTableNames()`
 
 `getTableData(tableName)`: Get the data of the table with **tableName** in the form of an object which contains the following properties: **name**, **nOfColumns**, **columnNames** (an array). The latter two can also be retrieved using `getNumberOfColumns(tableName)`and `getColumnNames(tableName)`, respectively.
 
