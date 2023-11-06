@@ -1,10 +1,10 @@
 # slr_database
 
-aka everything is a localStorage entry
+aka everything is a LocalStorage entry
 
-#### set-up:
-   - database entry contains the names and column numbers of the tables
-   - each table is a different localStorage entry
+### this means that:
+   - database entry contains the names, column numbers, column names of the tables
+   - each table is a different LocalStorage entry contaning its own entries
 
 ### to-do
 
@@ -12,7 +12,7 @@ aka everything is a localStorage entry
    - [x] create
    - [x] delete
 2. tables
-   - [x] create - there is only one database
+   - [x] create
    - [x] delete
    - modify
       - [ ] create new columns
